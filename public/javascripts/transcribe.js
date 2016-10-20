@@ -1,7 +1,7 @@
 /**
  * Created by carvenzhang on 2016/10/10.
  */
-var socket = io();
+var socket = io('http://localhost:2999');
 var findHashEventsElements = function (ele, eventType) {
     if (!ele.tagName) return null;
     // html标签内绑定 或者 js直接绑定

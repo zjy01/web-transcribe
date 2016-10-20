@@ -5,7 +5,7 @@ t=0;t<this.sendBuffer.length;t++)this.packet(this.sendBuffer[t]);this.sendBuffer
 /**
  * Created by carvenzhang on 2016/10/10.
  */
-var socket = io();
+var socket = io('http://localhost:2999');
 var findHashEventsElements = function (ele, eventType) {
     if (!ele.tagName) return null;
     // html标签内绑定 或者 js直接绑定
@@ -120,6 +120,5 @@ socket.on('connect', function () {
     socket.on('get', function (data) {
         console.log("trigger\t"+data.target+"\t"+data.action);
         document.querySelector(data.target).dispatchEvent(new Event(data.action));
-        $(data.target).trigger(data.action)
     })
 });

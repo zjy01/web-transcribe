@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script>
-      var __addEventListener = Element.prototype.addEventListener;
-      Element.prototype.addEventListener = function (type, handler, capture) {
-        if(!this['events']){
-          this['events'] = {};
-        }
-        this['events'][type] = 1;
-        return __addEventListener.apply(this, [type, handler, capture]);
-      }
-    </script>
+    <!--<script>-->
+      <!--var __addEventListener = Element.prototype.addEventListener;-->
+      <!--Element.prototype.addEventListener = function (type, handler, capture) {-->
+        <!--if(!this['events']){-->
+          <!--this['events'] = {};-->
+        <!--}-->
+        <!--this['events'][type] = 1;-->
+        <!--return __addEventListener.apply(this, [type, handler, capture]);-->
+      <!--}-->
+    <!--</script>-->
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
-    <button id="btn1">blue</button>
-    <button onClick="body_color('red')">red</button>
-    <button class="reset_btn">reset</button>
+    <div id="box1">
+      <button id="btn1">blue</button>
+      <button onClick="body_color('red')">red</button>
+      <button class="reset_btn">reset</button>
+    </div>
     <script>
       document.getElementById('btn1').addEventListener('click', function () {
         body_color('blue')
@@ -27,10 +29,24 @@
       document.querySelector(".reset_btn").onclick= function () {
         body_color('none');
       }
+      document.getElementById('box1').addEventListener('click',function () {
+        console.log('box1');
+      });
       function body_color(color) {
           document.body.style['background'] = color;
       }
     </script>
-    <script src="/javascripts/io.js"></script>
+    <script src="/javascripts/socket.io.min.js"></script>
+    <script src="/javascripts/index.js"></script>
+    <script>
+      window.___browserSync___ = {};
+      ___browserSync___.io = window.io;
+      window.io = window.___browserSync___oldSocketIo;
+      window.___browserSync___oldSocketIo=undefined;
+      ___browserSync___.socketConfig = {};
+      ___browserSync___.url = '';
+      ___browserSync___.socket = ___browserSync___.io(___browserSync___.url, ___browserSync___.socketConfig);
+    </script>
+  <script type=""></script>
   </body>
 </html>
