@@ -44,19 +44,20 @@ var BrowserSync = function (options) {
  */
 BrowserSync.prototype.canSync = function (data, optPath) {
 
-    data = data || {};
-
-    if (data.override) {
-        return true;
-    }
-
-    var canSync = true;
-
-    if (optPath) {
-        canSync = this.getOption(optPath);
-    }
-
-    return canSync && data.url === window.location.pathname;
+    return true;
+    //data = data || {};
+    //
+    //if (data.override) {
+    //    return true;
+    //}
+    //
+    //var canSync = true;
+    //
+    //if (optPath) {
+    //    canSync = this.getOption(optPath);
+    //}
+    //
+    //return canSync && data.url === window.location.pathname;
 };
 
 /**
@@ -114,6 +115,7 @@ function getByPath(obj, path) {
 
     return obj;
 }
+
 },{"./browser.utils":2,"./emitter":5,"./notify":16,"./socket":17,"./tab":18}],2:[function(require,module,exports){
 "use strict";
 
@@ -712,9 +714,10 @@ sync.getMatches = function (elems, url, attr) {
     }
 
     var matches = [];
+    var urlMatcher = new RegExp("(^|/)" + url);
 
     for (var i = 0, len = elems.length; i < len; i += 1) {
-        if (elems[i][attr].indexOf(url) !== -1) {
+        if (urlMatcher.test(elems[i][attr])) {
             matches.push(elems[i]);
         }
     }
@@ -1116,8 +1119,8 @@ exports.browserEvent = function (bs) {
  * @returns {Function}
  */
 exports.socketEvent = function (bs, eventManager) {
-
     return function (data) {
+        console.log("click get");
 
         if (!bs.canSync(data, OPT_PATH) || bs.tabHidden) {
             return false;
@@ -1131,6 +1134,7 @@ exports.socketEvent = function (bs, eventManager) {
         }
     };
 };
+
 },{}],8:[function(require,module,exports){
 "use strict";
 
@@ -1215,13 +1219,13 @@ exports.plugins = {
  */
 exports.init = function (bs, eventManager) {
 
-    var checkOpt = true;
-    var options = bs.options.ghostMode.forms;
-
-    if (options === true) {
-        checkOpt = false;
-    }
-
+    var checkOpt = false;
+    //var checkOpt = true;
+    //var options = bs.options.ghostMode.forms;
+    //
+    //if (options === true) {
+    //    checkOpt = false;
+    //}
     function init(name) {
         exports.plugins[name].init(bs, eventManager);
     }
@@ -1230,12 +1234,13 @@ exports.init = function (bs, eventManager) {
         if (!checkOpt) {
             init(name);
         } else {
-            if (options[name]) {
-                init(name);
-            }
+            //if (options[name]) {
+            //    init(name);
+            //}
         }
     }
 };
+
 },{"./ghostmode.forms.input":8,"./ghostmode.forms.submit":10,"./ghostmode.forms.toggles":11}],10:[function(require,module,exports){
 "use strict";
 
@@ -1416,6 +1421,7 @@ exports.plugins = {
  */
 exports.init = function (bs) {
     for (var name in exports.plugins) {
+        window.console.log(name,"init");
         exports.plugins[name].init(bs, eventManager);
     }
 };
@@ -1677,7 +1683,7 @@ exports.init = function (options) {
 
         // Always init on page load
         ghostMode.init(browserSync);
-        codeSync.init(browserSync);
+        //codeSync.init(browserSync);
 
         notify.init(browserSync);
 
@@ -1700,7 +1706,10 @@ exports.init = function (options) {
 /**
  * Handle individual socket connections
  */
-socket.on("connection", exports.init);
+socket.on("connect", function () {
+    console.log("connect in");
+    exports.init({});
+});
 
 /**debug:start**/
 if (window.__karma__) {
@@ -1757,19 +1766,19 @@ exports.init = function (bs) {
 
     var cssStyles = styles;
 
-    if (options.notify.styles) {
-
-        if (Object.prototype.toString.call(options.notify.styles) === "[object Array]") {
-            // handle original array behavior, replace all styles with a joined copy
-            cssStyles = options.notify.styles.join(";");
-        } else {
-            for (var key in options.notify.styles) {
-                if (options.notify.styles.hasOwnProperty(key)) {
-                    cssStyles[key] = options.notify.styles[key];
-                }
-            }
-        }
-    }
+    //if (options.notify.styles) {
+    //
+    //    if (Object.prototype.toString.call(options.notify.styles) === "[object Array]") {
+    //        // handle original array behavior, replace all styles with a joined copy
+    //        cssStyles = options.notify.styles.join(";");
+    //    } else {
+    //        for (var key in options.notify.styles) {
+    //            if (options.notify.styles.hasOwnProperty(key)) {
+    //                cssStyles[key] = options.notify.styles[key];
+    //            }
+    //        }
+    //    }
+    //}
 
     elem = document.createElement("DIV");
     elem.id = "__bs_notify__";
@@ -1845,6 +1854,7 @@ exports.flash = function (message, timeout) {
 
     return elem;
 };
+
 },{"./browser.utils":2,"./ghostmode.scroll":14}],17:[function(require,module,exports){
 "use strict";
 
@@ -1884,7 +1894,9 @@ exports.emit = function (name, data) {
  * @param func
  */
 exports.on = function (name, func) {
+    console.log("on", name);
     exports.socket.on(name, func);
+    console.log(exports.socket);
 };
 },{}],18:[function(require,module,exports){
 var utils        = require("./browser.utils");

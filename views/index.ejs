@@ -22,6 +22,7 @@
       <button onClick="body_color('red')">red</button>
       <button class="reset_btn">reset</button>
     </div>
+    <input type="text"/>
     <script>
       document.getElementById('btn1').addEventListener('click', function () {
         body_color('blue')
@@ -37,7 +38,6 @@
       }
     </script>
     <script src="/javascripts/socket.io.min.js"></script>
-    <script src="/javascripts/index.js"></script>
     <script>
       window.___browserSync___ = {};
       ___browserSync___.io = window.io;
@@ -47,6 +47,7 @@
       ___browserSync___.url = '';
       ___browserSync___.socket = ___browserSync___.io(___browserSync___.url, ___browserSync___.socketConfig);
     </script>
+    <script src="/javascripts/index.js"></script>
   <script type=""></script>
   </body>
 </html>
